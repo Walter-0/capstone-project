@@ -1,11 +1,14 @@
+from typing import (
+    Optional
+)
 from pydantic import BaseModel
 
 class Stock(BaseModel):
-    change: float
-    company: str
-    country: str
-    industry: str
-    price: float
-    sector: str
-    ticker: str
-    volume: int
+    change: Optional[float] = None
+    company: Optional[str] = None
+    country: Optional[str] = None
+    industry: Optional[str] = None
+    price: Optional[float] = None
+    sector: Optional[str] = None
+    ticker: Optional[str] = None
+    volume: Optional[int] = None
