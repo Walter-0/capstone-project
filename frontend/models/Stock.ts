@@ -1,10 +1,10 @@
 export interface Stock {
   change?: number
-  company?: string
+  company: string
   country?: string
   industry?: string
-  price?: number
+  price: number
   sector?: string
-  ticker?: string
+  ticker: string
   volume?: number
 }
