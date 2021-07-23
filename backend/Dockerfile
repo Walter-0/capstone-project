@@ -1,8 +1,11 @@
+# syntax=docker/dockerfile:1
+
 FROM python:3.9-slim
 
 WORKDIR /app
 
 COPY ./src /app/src
+
 COPY ./requirements.txt /app
 
 

@@ -1,15 +1,13 @@
+# syntax=docker/dockerfile:1
+
 FROM node:lts
 
 WORKDIR /app
 
-COPY ./package.json /app
+COPY ["package.json", "yarn.lock", "./"]
 
 RUN yarn install
 
-COPY . /app
-
-ENV PORT=3000
-
-EXPOSE 3000
+COPY . .
 
 CMD ["yarn", "dev"]

@@ -1,10 +1,3 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-
-from src.models.stock import Stock
-
-app = FastAPI()
-
 from src.database import (
     fetch_all_stocks,
     fetch_one_stock,
@@ -13,6 +6,13 @@ from src.database import (
     update_stock,
     remove_stock
 )
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
+from src.models.stock import Stock
+
+app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,14 +22,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def read_root():
     return {'Jimmy': 'Jammy'}
+
 
 @app.get('/api/stocks')
 async def get_stocks():
     response = await fetch_all_stocks()
     return response
+
 
 @app.get('/api/stock/{ticker}', response_model=Stock)
 async def get_stock_by_ticker(ticker):
@@ -38,6 +41,7 @@ async def get_stock_by_ticker(ticker):
         return response
     raise HTTPException(404, f"No stock found with ticker symbol {ticker}")
 
+
 @app.get('/api/industry/{industry}')
 async def get_stocks_by_industry(industry):
     response = await fetch_stocks_by_industry(industry)
@@ -45,12 +49,14 @@ async def get_stocks_by_industry(industry):
         return response
     raise HTTPException(404, f"No stocks found in industry {industry}")
 
+
 @app.post('/api/stock', response_model=Stock)
-async def post_stock(stock:Stock):
+async def post_stock(stock: Stock):
     response = await create_stock(stock.dict())
     if response:
         return response
     raise HTTPException(400, "Something went wrong")
+
 
 @app.put('/api/stock/{ticker}', response_model=Stock)
 async def put_stock(change: float, company: str, country: str, industry: str, price: float, sector: str, ticker: str, volume: int):
@@ -58,6 +64,7 @@ async def put_stock(change: float, company: str, country: str, industry: str, pr
     if response:
         return response
     raise HTTPException(404, f"No stock found with ticker symbol {ticker}")
+
 
 @app.delete('/api/stock/{ticker}')
 async def delete_stock(ticker):
