@@ -35,7 +35,7 @@ async def get_stocks():
 
 
 @app.get('/api/stock/{ticker}', response_model=Stock)
-async def get_stock_by_ticker(ticker):
+async def get_stock_by_ticker(ticker: str):
     response = await fetch_one_stock(ticker)
     if response:
         return response
@@ -43,7 +43,7 @@ async def get_stock_by_ticker(ticker):
 
 
 @app.get('/api/industry/{industry}')
-async def get_stocks_by_industry(industry):
+async def get_stocks_by_industry(industry: str):
     response = await fetch_stocks_by_industry(industry)
     if response:
         return response
@@ -59,15 +59,16 @@ async def post_stock(stock: Stock):
 
 
 @app.put('/api/stock/{ticker}', response_model=Stock)
-async def put_stock(change: float, company: str, country: str, industry: str, price: float, sector: str, ticker: str, volume: int):
-    response = await update_stock(change, company, country, industry, price, sector, ticker, volume)
+async def put_stock(stock: Stock):
+    response = await update_stock(stock.dict())
     if response:
         return response
-    raise HTTPException(404, f"No stock found with ticker symbol {ticker}")
+    raise HTTPException(
+        404, f"No stock found with ticker symbol {stock.ticker}")
 
 
 @app.delete('/api/stock/{ticker}')
-async def delete_stock(ticker):
+async def delete_stock(ticker: str):
     response = await remove_stock(ticker)
     if response:
         return f"Successfully deleted stock {ticker}"

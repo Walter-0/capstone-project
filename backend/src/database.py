@@ -2,7 +2,7 @@ from src.models.stock import Stock
 
 import motor.motor_asyncio
 
-client = motor.motor_asyncio.AsyncIOMotorClient("mongodb://mongo:27017/market")
+client = motor.motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
 database = client.market
 collection = database.stocks
 
@@ -34,19 +34,19 @@ async def create_stock(stock):
     return document
 
 
-async def update_stock(change, company, country, industry, price, sector, ticker, volume):
-    await collection.update_one({"ticker": ticker}, {"$set": {
-        "change": change,
-        "company": company,
-        "country": country,
-        "industry": industry,
-        "price": price,
-        "sector": sector,
-        "ticker": ticker,
-        "volume": volume
+async def update_stock(stock: Stock):
+    await collection.update_one({"ticker": stock["ticker"]}, {"$set": {
+        "change": stock["change"],
+        "company": stock["company"],
+        "country": stock["country"],
+        "industry": stock["industry"],
+        "price": stock["price"],
+        "sector": stock["sector"],
+        "ticker": stock["ticker"],
+        "volume": stock["volume"]
     }})
 
-    document = await collection.find_one({"ticker": ticker})
+    document = await collection.find_one({"ticker": stock["ticker"]})
     return document
 
 
