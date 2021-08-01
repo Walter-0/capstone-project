@@ -15,6 +15,18 @@ async def fetch_all_stocks():
     return stocks
 
 
+async def search_all_stocks(query):
+    stocks = []
+    cursor = collection.find(
+        {"$text": {"$search": query}},
+        {"score": {"$meta": "textScore"}}
+    ).sort("score", {"$meta": "textScore"}).limit(5)
+
+    async for document in cursor:
+        stocks.append(Stock(**document))
+    return stocks
+
+
 async def fetch_one_stock(ticker):
     document = await collection.find_one({"ticker": ticker})
     return document

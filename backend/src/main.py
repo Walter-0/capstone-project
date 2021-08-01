@@ -1,5 +1,7 @@
+from typing import Optional
 from src.database import (
     fetch_all_stocks,
+    search_all_stocks,
     fetch_one_stock,
     fetch_stocks_by_industry,
     create_stock,
@@ -32,6 +34,13 @@ def read_root():
 async def get_stocks():
     response = await fetch_all_stocks()
     return response
+
+
+@app.get('/api/stocks/search')
+async def search_stocks(q: Optional[str] = None):
+    if q:
+        response = await search_all_stocks(q)
+        return response
 
 
 @app.get('/api/stock/{ticker}', response_model=Stock)

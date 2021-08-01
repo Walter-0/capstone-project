@@ -38,26 +38,7 @@ const Home: NextPage = () => {
         </Container>
       </Navbar>
 
-      <AutoComplete
-        suggestions={[
-          'Angular',
-          'Blitzjs',
-          'Gatsby',
-          'Reactjs',
-          'Vuejs',
-          'Svelte',
-          'Nextjs',
-          'Node',
-          'Express',
-          'Sails',
-          'Loopback',
-          'React-router',
-          'Redux',
-          'Flux',
-          'Yarn',
-          'Npm',
-        ]}
-      />
+      <AutoComplete />
 
       <Table striped bordered hover>
         <thead>

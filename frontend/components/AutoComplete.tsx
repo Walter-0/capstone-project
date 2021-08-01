@@ -1,15 +1,10 @@
 import { useState } from 'react';
 
-interface AutoCompleteProps {
-  suggestions: string[];
-}
-
-const AutoComplete: React.FC<AutoCompleteProps> = props => {
+const AutoComplete: React.FC = () => {
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [input, setInput] = useState('');
-  const { suggestions } = props;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const userInput = e.target.value;
