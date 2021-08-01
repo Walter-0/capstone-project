@@ -1,47 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import axios, { AxiosResponse } from 'axios';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
-import { Stock } from '../../models/Stock';
+import { Stock as StockModel } from '../../models/Stock';
 
 const baseURL = 'http://localhost:8000/api';
 
-const StockComponent: React.FC = () => {
-  const router = useRouter();
-  const { ticker } = router.query;
-  const [stockData, setStockData] = useState<Stock>();
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  const response: AxiosResponse<StockModel> = await axios.get<StockModel>(
+    `${baseURL}/stock/${context.params?.ticker as string}`
+  );
+  const stock = response.data;
 
-  const getStock = async (ticker: string): Promise<void> => {
-    try {
-      const response: AxiosResponse<Stock> = await axios.get<Stock>(`${baseURL}/stock/${ticker.toUpperCase()}`);
-      setStockData(response.data);
-    } catch (error) {
-      throw error;
-    }
+  if (!stock) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: { stock },
   };
+};
 
-  useEffect(() => {
-    if (ticker) {
-      void getStock(ticker as string);
-    }
-  }, [ticker]);
+const Stock: NextPage<{ stock: StockModel }> = ({ stock }) => {
+  const { ticker, company, country, industry, sector, price, volume, change } = stock;
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container>
       <Row>
         <Col>
           <Card style={{ width: '24rem' }}>
-            <Card.Header>{stockData?.ticker}</Card.Header>
+            <Card.Header>{ticker}</Card.Header>
             <Card.Body>
-              <Card.Title>{stockData?.company}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{stockData?.country}</Card.Subtitle>
+              <Card.Title>{company}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">{country}</Card.Subtitle>
 
-              <Card.Text>Industry: {stockData?.industry}</Card.Text>
-              <Card.Text>Sector: {stockData?.sector}</Card.Text>
-              <Card.Text>Price: {stockData?.price}</Card.Text>
-              <Card.Text>Volume: {stockData?.volume}</Card.Text>
-              <Card.Text>Change: {stockData?.change}</Card.Text>
+              <Card.Text>Industry: {industry}</Card.Text>
+              <Card.Text>Sector: {sector}</Card.Text>
+              <Card.Text>Price: {price}</Card.Text>
+              <Card.Text>Volume: {volume}</Card.Text>
+              <Card.Text>Change: {change}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -50,4 +55,4 @@ const StockComponent: React.FC = () => {
   );
 };
 
-export default StockComponent;
+export default Stock;

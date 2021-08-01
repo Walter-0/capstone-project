@@ -1,13 +1,15 @@
+import { NextPage } from 'next';
 import { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { Button, Container, FormControl, InputGroup, Navbar, Table } from 'react-bootstrap';
 import Link from 'next/link';
 
 import { Stock } from '../models/Stock';
+import AutoComplete from '../components/AutoComplete';
 
 const baseURL = 'http://localhost:8000/api';
 
-const Home: React.FC = () => {
+const Home: NextPage = () => {
   const [tableData, setTableData] = useState<Stock[]>([]);
   const [searchInput, setSearchInput] = useState('');
 
@@ -20,9 +22,9 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleSearch = async (): Promise<void> => {
+  const handleSearch = () => {
     try {
-      getStock(searchInput);
+      void getStock(searchInput);
     } catch (error) {
       throw error;
     }
@@ -36,17 +38,26 @@ const Home: React.FC = () => {
         </Container>
       </Navbar>
 
-      <InputGroup className="mb-3">
-        <FormControl
-          placeholder="Stock ticker"
-          type="text"
-          value={searchInput}
-          onChange={e => setSearchInput(e.target.value)}
-        />
-        <Button variant="outline-primary" onClick={handleSearch}>
-          Search
-        </Button>
-      </InputGroup>
+      <AutoComplete
+        suggestions={[
+          'Angular',
+          'Blitzjs',
+          'Gatsby',
+          'Reactjs',
+          'Vuejs',
+          'Svelte',
+          'Nextjs',
+          'Node',
+          'Express',
+          'Sails',
+          'Loopback',
+          'React-router',
+          'Redux',
+          'Flux',
+          'Yarn',
+          'Npm',
+        ]}
+      />
 
       <Table striped bordered hover>
         <thead>

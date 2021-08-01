@@ -1,4 +1,9 @@
-module.exports = {
+// @ts-check
+
+/**
+ * @type {import('next').NextConfig}
+ **/
+const nextConfig = {
   reactStrictMode: true,
   webpackDevMiddleware: config => {
     config.watchOptions = {
@@ -9,3 +14,6 @@ module.exports = {
     return config
   },
 }
+
+
+module.exports = nextConfig;
