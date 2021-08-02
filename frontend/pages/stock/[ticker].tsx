@@ -5,6 +5,7 @@ import axios, { AxiosResponse } from 'axios';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
 import { Stock as StockModel } from '../../models/Stock';
+import NavbarComponent from '../components/NavbarComponent';
 
 const baseURL = 'http://localhost:8000/api';
 
@@ -34,29 +35,33 @@ const Stock: NextPage<{ stock: StockModel }> = ({ stock }) => {
   }
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <Card style={{ width: '24rem' }}>
-            <Card.Header>{ticker}</Card.Header>
-            <Card.Body>
-              <Card.Title>{company}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{country}</Card.Subtitle>
+    <>
+      <NavbarComponent />
 
-              <Card.Text>Industry: {industry}</Card.Text>
-              <Card.Text>Sector: {sector}</Card.Text>
-              <Card.Text>Price: {price}</Card.Text>
-              <Card.Text>Volume: {volume}</Card.Text>
-              <Card.Text>Change: {change}</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
+      <Container>
+        <Row>
+          <Col>
+            <Card style={{ width: '24rem' }}>
+              <Card.Header>{ticker}</Card.Header>
+              <Card.Body>
+                <Card.Title>{company}</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">{country}</Card.Subtitle>
 
-        <Link href={`/`}>
-          <a>Back</a>
-        </Link>
-      </Row>
-    </Container>
+                <Card.Text>Industry: {industry}</Card.Text>
+                <Card.Text>Sector: {sector}</Card.Text>
+                <Card.Text>Price: {price}</Card.Text>
+                <Card.Text>Volume: {volume}</Card.Text>
+                <Card.Text>Change: {change}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Link href={`/`}>
+            <a>Back</a>
+          </Link>
+        </Row>
+      </Container>
+    </>
   );
 };
 

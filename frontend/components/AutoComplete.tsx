@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
-import { Container, Navbar, Table } from 'react-bootstrap';
 import Link from 'next/link';
 
 import { Stock } from '../models/Stock';

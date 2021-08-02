@@ -32,6 +32,11 @@ async def fetch_one_stock(ticker):
     return document
 
 
+async def fetch_all_industries():
+    industries = await collection.distinct("industry")
+    return industries
+
+
 async def fetch_stocks_by_industry(industry):
     stocks = []
     cursor = collection.find({"industry": industry})

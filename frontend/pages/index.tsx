@@ -1,18 +1,15 @@
 import { NextPage } from 'next';
-import { Container, Navbar } from 'react-bootstrap';
+import Link from 'next/link';
 
 import AutoComplete from '../components/AutoComplete';
+import NavbarComponent from '../components/NavbarComponent';
 
 const baseURL = 'http://localhost:8000/api';
 
 const Home: NextPage = () => {
   return (
     <div className="Home">
-      <Navbar bg="light" variant="light" expand="lg">
-        <Container>
-          <Navbar.Brand>Stocks</Navbar.Brand>
-        </Container>
-      </Navbar>
+      <NavbarComponent />
 
       <AutoComplete />
     </div>

@@ -3,6 +3,7 @@ from src.database import (
     fetch_all_stocks,
     search_all_stocks,
     fetch_one_stock,
+    fetch_all_industries,
     fetch_stocks_by_industry,
     create_stock,
     update_stock,
@@ -44,6 +45,12 @@ async def get_stock_by_ticker(ticker: str):
     if response:
         return response
     raise HTTPException(404, f"No stock found with ticker symbol {ticker}")
+
+
+@app.get('/api/industries')
+async def get_industries():
+    response = await fetch_all_industries()
+    return response
 
 
 @app.get('/api/industry/{industry}')
