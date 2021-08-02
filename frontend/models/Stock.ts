@@ -4,6 +4,7 @@ export interface Stock {
   country?: string;
   industry?: string;
   price: number;
+  score: number;
   sector?: string;
   ticker: string;
   volume?: number;

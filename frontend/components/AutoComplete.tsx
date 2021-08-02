@@ -1,4 +1,9 @@
 import { useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
+
+import { Stock } from '../models/Stock';
+
+const baseURL = 'http://localhost:8000/api';
 
 const AutoComplete: React.FC = () => {
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
@@ -6,16 +11,19 @@ const AutoComplete: React.FC = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [input, setInput] = useState('');
 
+  const searchStocks = async (query: string) => {
+    if (query) {
+      const response: AxiosResponse<Stock[]> = await axios.get<Stock[]>(`${baseURL}/stocks/search/?q=${query}`);
+      const suggestions = response.data.map(stock => {
+        return `${stock.ticker} - ${stock.company}`;
+      });
+      setFilteredSuggestions(suggestions);
+    }
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const userInput = e.target.value;
-
-    // Filter our suggestions that don't contain the user's input
-    const unLinked = suggestions.filter(
-      (suggestion: string) => suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-    );
-
+    void searchStocks(e.target.value);
     setInput(e.target.value);
-    setFilteredSuggestions(unLinked);
     setActiveSuggestionIndex(0);
     setShowSuggestions(true);
   };
