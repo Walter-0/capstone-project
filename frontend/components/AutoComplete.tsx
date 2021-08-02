@@ -1,22 +1,22 @@
 import { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
+import { Container, Navbar, Table } from 'react-bootstrap';
+import Link from 'next/link';
 
 import { Stock } from '../models/Stock';
 
 const baseURL = 'http://localhost:8000/api';
 
 const AutoComplete: React.FC = () => {
-  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<Stock[]>([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [input, setInput] = useState('');
 
   const searchStocks = async (query: string) => {
     if (query) {
-      const response: AxiosResponse<Stock[]> = await axios.get<Stock[]>(`${baseURL}/stocks/search/?q=${query}`);
-      const suggestions = response.data.map(stock => {
-        return `${stock.ticker} - ${stock.company}`;
-      });
+      const response: AxiosResponse<Stock[]> = await axios.get<Stock[]>(`${baseURL}/stocks/search?q=${query}`);
+      const suggestions = response.data;
       setFilteredSuggestions(suggestions);
     }
   };
@@ -28,7 +28,7 @@ const AutoComplete: React.FC = () => {
     setShowSuggestions(true);
   };
 
-  const onClick = (e: React.MouseEvent<HTMLLIElement>) => {
+  const onClick = (e: React.MouseEvent<HTMLElement>) => {
     setFilteredSuggestions([]);
     setInput(e.currentTarget.innerText);
     setActiveSuggestionIndex(0);
@@ -38,7 +38,7 @@ const AutoComplete: React.FC = () => {
   const onKeyDown = (e: React.KeyboardEvent) => {
     // User pressed the enter key
     if (e.code === 'Enter') {
-      setInput(filteredSuggestions[activeSuggestionIndex]);
+      setInput(filteredSuggestions[activeSuggestionIndex].ticker + filteredSuggestions[activeSuggestionIndex].company);
       setActiveSuggestionIndex(0);
       setShowSuggestions(false);
     }
@@ -62,7 +62,7 @@ const AutoComplete: React.FC = () => {
 
   const SuggestionsListComponent = () => {
     return filteredSuggestions.length ? (
-      <ul className="suggestions">
+      <ul>
         {filteredSuggestions.map((suggestion, index) => {
           let className;
           // Flag the active suggestion with a class
@@ -70,8 +70,12 @@ const AutoComplete: React.FC = () => {
             className = 'suggestion-active';
           }
           return (
-            <li className={className} key={suggestion} onClick={onClick}>
-              {suggestion}
+            <li className={className} key={suggestion.ticker} onClick={onClick}>
+              <Link href={`/stock/${encodeURIComponent(suggestion.ticker.toUpperCase())}`}>
+                <a>
+                  {suggestion.ticker} {''} {suggestion.company}
+                </a>
+              </Link>
             </li>
           );
         })}
@@ -85,7 +89,7 @@ const AutoComplete: React.FC = () => {
 
   return (
     <>
-      <input type="text" onChange={onChange} onKeyDown={onKeyDown} value={input} />
+      <input type="text" onChange={onChange} onKeyDown={onKeyDown} value={input} style={{ width: '25rem' }} />
       {showSuggestions && input && <SuggestionsListComponent />}
     </>
   );

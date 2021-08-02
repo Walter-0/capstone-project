@@ -25,11 +25,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def read_root():
-    return {'Jimmy': 'Jammy'}
-
-
 @app.get('/api/stocks')
 async def get_stocks():
     response = await fetch_all_stocks()

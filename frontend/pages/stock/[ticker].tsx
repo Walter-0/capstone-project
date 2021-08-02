@@ -1,4 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios, { AxiosResponse } from 'axios';
 import { Card, Col, Container, Row } from 'react-bootstrap';
@@ -50,6 +51,10 @@ const Stock: NextPage<{ stock: StockModel }> = ({ stock }) => {
             </Card.Body>
           </Card>
         </Col>
+
+        <Link href={`/`}>
+          <a>Back</a>
+        </Link>
       </Row>
     </Container>
   );
